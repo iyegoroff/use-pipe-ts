@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es6",
+    "strict": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "removeComments": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": true,
+    "noUncheckedIndexedAccess": true,
+    "types": []
+  }
+}
