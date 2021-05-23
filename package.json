@@ -1,6 +1,6 @@
 {
   "name": "use-pipe-ts",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Pipe-based useCallback react hook",
   "main": "dist/umd/index.js",
   "module": "dist/index.js",
