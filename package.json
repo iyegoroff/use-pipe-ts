@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "preversion": "npm run build",
-    "postversion": "git add . && git commit -am build || : && git push && git push --tags",
+    "postversion": "git add . && git commit -am build || : && git push && git push --tags && npm publish",
     "build:dts": "tsc -p . -d true --emitDeclarationOnly true --removeComments false",
     "build:umd": "tsc -p . -m umd -t es5 --lib es5,es2015.collection --outDir ./dist/umd",
     "build:es6": "tsc -p .",
