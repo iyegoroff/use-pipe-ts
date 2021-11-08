@@ -9,7 +9,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "allowUnreachableCode": true,
+    "allowUnreachableCode": false,
     "noUncheckedIndexedAccess": true,
     "types": []
   }
