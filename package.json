@@ -2,6 +2,7 @@
   "name": "use-pipe-ts",
   "version": "1.0.3",
   "description": "Pipe-based useCallback react hook",
+  "sideEffects": false,
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/dts/index.d.ts",
