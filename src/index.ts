@@ -1,5 +1,5 @@
 import { pipe } from 'pipe-ts'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
 type UnknownFunction = (...params: readonly unknown[]) => unknown
 
@@ -79,7 +79,7 @@ export function usePipe<
 ): (...args: A) => J
 
 export function usePipe(...fns: readonly [UnknownFunction]): UnknownFunction {
-  return useMemo(() => pipe(...fns), fns)
+  return useCallback(pipe(...fns), fns)
 }
 
 export function useArgPipe<A, B>(arg: A, ab: (a: A) => B): () => B
@@ -156,6 +156,8 @@ export function useArgPipe(
   arg: unknown,
   ...fns: readonly [UnknownFunction]
 ): UnknownFunction {
-  const getArg = useCallback(() => arg, [arg])
-  return useMemo(() => pipe(getArg, ...fns), [getArg, fns])
+  return useCallback(
+    pipe(() => arg, ...fns),
+    [arg, ...fns]
+  )
 }
