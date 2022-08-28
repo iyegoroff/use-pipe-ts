@@ -1,6 +1,6 @@
 {
   "name": "use-pipe-ts",
-  "version": "1.0.8",
+  "version": "2.0.0",
   "description": "Pipe-based useCallback react hook",
   "sideEffects": false,
   "types": "./dist/dts/index.d.ts",
