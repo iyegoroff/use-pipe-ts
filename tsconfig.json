@@ -2,7 +2,9 @@
   "compilerOptions": {
     "sourceMap": true,
     "target": "es2018",
+    "lib": ["ES2019.Array", "ES2018", "DOM"],
     "strict": true,
+    "jsx": "react",
     "moduleResolution": "node",
     "removeComments": true,
     "esModuleInterop": true,
@@ -13,6 +15,6 @@
     "noUnusedParameters": true,
     "allowUnreachableCode": false,
     "noUncheckedIndexedAccess": true,
-    "types": []
+    "types": ["jest", "node"]
   }
 }

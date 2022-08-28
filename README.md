@@ -11,17 +11,23 @@ Pipe-based useCallback react hook
 
 ## Getting started
 
-`$ npm i pipe-ts use-pipe-ts`
+`$ npm i use-pipe-ts`
 
 ## Overview
 
 ```js
 export function usePipe(...fns) {
-  return useMemo(() => pipe(...fns), fns)
+  return useCallback(
+    pipe(...fns.map((fn) => (typeof fn === 'function' ? fn : subst(...fn)))),
+    fns.flat()
+  )
 }
 
-export function useArgPipe(arg, ...fns) {
-  const getArg = useCallback(() => arg, [arg])
-  return useMemo(() => pipe(getArg, ...fns), [getArg, fns])
+function subst(fn, ...subs) {
+  return (...args) => fn(...subs, ...args)
 }
 ```
+
+## Usage
+
+See [test](/test/index.spec.tsx)

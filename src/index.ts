@@ -3,60 +3,131 @@ import { useCallback } from 'react'
 
 type UnknownFunction = (...params: readonly unknown[]) => unknown
 
-export function usePipe<A extends readonly unknown[], B>(
-  ab: (...a: A) => B
-): (...args: A) => B
-export function usePipe<A extends readonly unknown[], B, C>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C
-): (...args: A) => C
-export function usePipe<A extends readonly unknown[], B, C, D>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D
-): (...args: A) => D
-export function usePipe<A extends readonly unknown[], B, C, D, E>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E
-): (...args: A) => E
-export function usePipe<A extends readonly unknown[], B, C, D, E, F>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F
-): (...args: A) => F
-export function usePipe<A extends readonly unknown[], B, C, D, E, F, G>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G
-): (...args: A) => G
-export function usePipe<A extends readonly unknown[], B, C, D, E, F, G, H>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H
-): (...args: A) => H
-export function usePipe<A extends readonly unknown[], B, C, D, E, F, G, H, I>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I
-): (...args: A) => I
+type NextFun<From, To, Subs extends readonly unknown[]> =
+  | ((from: From) => To)
+  | readonly [(...from: readonly [...Subs, From]) => To, ...Subs]
+
 export function usePipe<
-  A extends readonly unknown[],
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  Asubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs]
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => B
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => C
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => D
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  E,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => E
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  E,
+  F,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = [],
+  Esubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>,
+  ef: NextFun<E, F, Esubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => F
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = [],
+  Esubs extends readonly unknown[] = [],
+  Fsubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>,
+  ef: NextFun<E, F, Esubs>,
+  fg: NextFun<F, G, Fsubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => G
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  H,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = [],
+  Esubs extends readonly unknown[] = [],
+  Fsubs extends readonly unknown[] = [],
+  Gsubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>,
+  ef: NextFun<E, F, Esubs>,
+  fg: NextFun<F, G, Fsubs>,
+  gh: NextFun<G, H, Gsubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => H
+
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
   B,
   C,
   D,
@@ -65,99 +136,73 @@ export function usePipe<
   G,
   H,
   I,
-  J
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = [],
+  Esubs extends readonly unknown[] = [],
+  Fsubs extends readonly unknown[] = [],
+  Gsubs extends readonly unknown[] = [],
+  Hsubs extends readonly unknown[] = []
 >(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I,
-  ij: (i: I) => J
-): (...args: A) => J
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>,
+  ef: NextFun<E, F, Esubs>,
+  fg: NextFun<F, G, Fsubs>,
+  gh: NextFun<G, H, Gsubs>,
+  hi: NextFun<H, I, Hsubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => I
 
-export function usePipe(...fns: readonly [UnknownFunction]): UnknownFunction {
-  return useCallback(pipe(...fns), fns)
-}
+export function usePipe<
+  Aargs extends readonly [...Asubs, ...unknown[]],
+  B,
+  C,
+  D,
+  E,
+  F,
+  G,
+  H,
+  I,
+  J,
+  Asubs extends readonly unknown[] = [],
+  Bsubs extends readonly unknown[] = [],
+  Csubs extends readonly unknown[] = [],
+  Dsubs extends readonly unknown[] = [],
+  Esubs extends readonly unknown[] = [],
+  Fsubs extends readonly unknown[] = [],
+  Gsubs extends readonly unknown[] = [],
+  Hsubs extends readonly unknown[] = [],
+  Isubs extends readonly unknown[] = []
+>(
+  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  bc: NextFun<B, C, Bsubs>,
+  cd: NextFun<C, D, Csubs>,
+  de: NextFun<D, E, Dsubs>,
+  ef: NextFun<E, F, Esubs>,
+  fg: NextFun<F, G, Fsubs>,
+  gh: NextFun<G, H, Gsubs>,
+  hi: NextFun<H, I, Hsubs>,
+  ij: NextFun<I, J, Isubs>
+): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => J
 
-export function useArgPipe<A, B>(arg: A, ab: (a: A) => B): () => B
-export function useArgPipe<A, B, C>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C
-): () => C
-export function useArgPipe<A, B, C, D>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D
-): () => D
-export function useArgPipe<A, B, C, D, E>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E
-): () => E
-export function useArgPipe<A, B, C, D, E, F>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F
-): () => F
-export function useArgPipe<A, B, C, D, E, F, G>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G
-): () => G
-export function useArgPipe<A, B, C, D, E, F, G, H>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H
-): () => H
-export function useArgPipe<A, B, C, D, E, F, G, H, I>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I
-): () => I
-export function useArgPipe<A, B, C, D, E, F, G, H, I, J>(
-  arg: A,
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I,
-  ij: (i: I) => J
-): () => J
-
-export function useArgPipe(
-  arg: unknown,
-  ...fns: readonly [UnknownFunction]
+export function usePipe(
+  ...fns: readonly [UnknownFunction | readonly [UnknownFunction, ...unknown[]]]
 ): UnknownFunction {
   return useCallback(
-    pipe(() => arg, ...fns),
-    [arg, ...fns]
+    pipe(
+      ...(fns.map((fn) => (typeof fn === 'function' ? fn : subst(...fn))) as [
+        UnknownFunction
+      ])
+    ),
+    fns.flat()
   )
+}
+
+function subst<Subs extends unknown[], Args extends unknown[], Return>(
+  fn: (...args: [...Subs, ...Args]) => Return,
+  ...subs: Subs
+) {
+  return (...args: Args) => fn(...subs, ...args)
 }
