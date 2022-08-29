@@ -7,12 +7,26 @@ type NextFun<From, To, Subs extends readonly unknown[]> =
   | ((from: From) => To)
   | readonly [(...from: readonly [...Subs, From]) => To, ...Subs]
 
+type SubConstraint<
+  Args extends readonly unknown[],
+  Subs extends readonly unknown[],
+  InitialSubs = Subs
+> = Subs extends [infer FirstSub, ...infer RestSubs]
+  ? Args extends [infer FirstArg, ...infer RestArgs]
+    ? FirstSub extends FirstArg
+      ? SubConstraint<RestArgs, RestSubs, InitialSubs>
+      : never
+    : never
+  : InitialSubs
+
 export function usePipe<
   Aargs extends readonly [...Asubs, ...unknown[]],
   B,
   Asubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs]
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>]
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => B
 
 export function usePipe<
@@ -22,7 +36,9 @@ export function usePipe<
   Asubs extends readonly unknown[] = [],
   Bsubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => C
 
@@ -35,7 +51,9 @@ export function usePipe<
   Bsubs extends readonly unknown[] = [],
   Csubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => D
@@ -51,7 +69,9 @@ export function usePipe<
   Csubs extends readonly unknown[] = [],
   Dsubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>
@@ -70,7 +90,9 @@ export function usePipe<
   Dsubs extends readonly unknown[] = [],
   Esubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -92,7 +114,9 @@ export function usePipe<
   Esubs extends readonly unknown[] = [],
   Fsubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -117,7 +141,9 @@ export function usePipe<
   Fsubs extends readonly unknown[] = [],
   Gsubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -145,7 +171,9 @@ export function usePipe<
   Gsubs extends readonly unknown[] = [],
   Hsubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -176,7 +204,9 @@ export function usePipe<
   Hsubs extends readonly unknown[] = [],
   Isubs extends readonly unknown[] = []
 >(
-  ab: ((...a: Aargs) => B) | readonly [(...a: Aargs) => B, ...Asubs],
+  ab:
+    | ((...a: Aargs) => B)
+    | readonly [(...a: Aargs) => B, ...SubConstraint<Aargs, Asubs>],
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
