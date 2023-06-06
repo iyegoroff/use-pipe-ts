@@ -34,7 +34,8 @@ describe('use-pipe-ts', () => {
   })
 
   test('should substitute arguments', () => {
-    const foo = (num: number, bool: boolean, str: string) => `${num}${bool}${str}`
+    const foo = (num: number, bool: boolean, str: string) =>
+      `${num}${bool}${str}`
 
     const Result = () => {
       const foo3 = usePipe([foo, 1], [foo, 2, true], [foo, 3, false])
@@ -47,8 +48,25 @@ describe('use-pipe-ts', () => {
     expect(getByTestId('result').textContent).toEqual('3false2true1falsefoo')
   })
 
+  test('should cast undefined to void', () => {
+    const foo = (bar: () => void, baz: () => void, x: number) => x
+    const bar = () => undefined
+    const baz = (foo: () => void, x: number) => `(${x + 1})`
+
+    const Result = () => {
+      const foo3 = usePipe([foo, bar, bar], [baz, bar])
+
+      return <div data-testid='result'>{foo3(10)}</div>
+    }
+
+    const { getByTestId } = render(<Result />)
+
+    expect(getByTestId('result').textContent).toEqual('(11)')
+  })
+
   test('should keep returned function identity between renders unless arguments changed', () => {
-    const foo = (num: number, bool: boolean, str: string) => `${num}${bool}${str}`
+    const foo = (num: number, bool: boolean, str: string) =>
+      `${num}${bool}${str}`
     const foos: (typeof foo)[] = []
 
     const Result = ({ arg }: { arg: number }) => {

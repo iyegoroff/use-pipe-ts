@@ -1,6 +1,12 @@
 import { pipe } from 'pipe-ts'
 import { useCallback } from 'react'
 
+type UndefinedReturnVoid<X extends readonly unknown[]> = {
+  readonly [Key in keyof X]: X[Key] extends (...args: infer Args) => undefined
+    ? X[Key] | ((...args: Args) => void)
+    : X[Key]
+}
+
 type UnknownFunction = (...params: readonly unknown[]) => unknown
 
 type NextFun<From, To, Subs extends readonly unknown[]> =
@@ -13,7 +19,7 @@ type FirstFun<
   Result
 > =
   | ((...a: Args) => Result)
-  | (readonly [(...a: Args) => Result, ...Subs] &
+  | (readonly [(...a: Args) => Result, ...UndefinedReturnVoid<Subs>] &
       readonly [(...a: Args) => Result, ...Partial<Args>])
 
 export function usePipe<
@@ -21,7 +27,7 @@ export function usePipe<
   B,
   Asubs extends readonly unknown[]
 >(
-  ab: FirstFun<Aargs, Asubs, B>
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => B
 
 export function usePipe<
@@ -31,7 +37,7 @@ export function usePipe<
   Asubs extends readonly unknown[] = [],
   Bsubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => C
 
@@ -44,7 +50,7 @@ export function usePipe<
   Bsubs extends readonly unknown[] = [],
   Csubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>
 ): (...args: Aargs extends [...Asubs, ...infer Rest] ? Rest : []) => D
@@ -60,7 +66,7 @@ export function usePipe<
   Csubs extends readonly unknown[] = [],
   Dsubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>
@@ -79,7 +85,7 @@ export function usePipe<
   Dsubs extends readonly unknown[] = [],
   Esubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -101,7 +107,7 @@ export function usePipe<
   Esubs extends readonly unknown[] = [],
   Fsubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -126,7 +132,7 @@ export function usePipe<
   Fsubs extends readonly unknown[] = [],
   Gsubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -154,7 +160,7 @@ export function usePipe<
   Gsubs extends readonly unknown[] = [],
   Hsubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
@@ -185,7 +191,7 @@ export function usePipe<
   Hsubs extends readonly unknown[] = [],
   Isubs extends readonly unknown[] = []
 >(
-  ab: FirstFun<Aargs, Asubs, B>,
+  ab: FirstFun<Aargs, UndefinedReturnVoid<Asubs>, B>,
   bc: NextFun<B, C, Bsubs>,
   cd: NextFun<C, D, Csubs>,
   de: NextFun<D, E, Dsubs>,
